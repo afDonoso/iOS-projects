@@ -8,14 +8,38 @@
 import SwiftUI
 
 struct ContentView: View {
+    //MARK: - PROPERTIES
+    var fruits = fruitsData
+    
+    @State private var isShowingSettings = false
+    
+    //MARK: - BODY
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        NavigationView {
+            List {
+                ForEach(fruits) { fruit in
+                    NavigationLink(destination: FruitDetailView(fruit: fruit)) {
+                        FruitRowView(fruit: fruit)
+                            .padding(.vertical, 4)
+                    } //: LINK
+                } //: LOOP
+            } //: LIST
+            .navigationTitle("Fruits")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isShowingSettings = true
+                    } label: {
+                        Image(systemName: "slider.horizontal.3")
+                    } //: BUTTON
+                    .sheet(isPresented: $isShowingSettings) {
+                        SettingsView()
+                    }
+                    
+                } //: TOOLBAR ITEM
+            } //: TOOLBAR
+        } //: NAVIGATION
+        .navigationViewStyle(.stack)
     }
 }
 
